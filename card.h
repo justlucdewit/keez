@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #pragma once
 
+// Library for:
+// - Managing cards
+// - Managing decks
+// - Managing shuffling
+
 // ====================================
 //    Cards
 // ====================================
@@ -93,9 +98,9 @@ DECK create_ordered_deck() {
 		.card_count = 0
 	};
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		CARD_SUIT suit = (CARD_SUIT) i;
-		
+
 		for (int j = 0; j < 13; j++) {
 			CARD_VALUE value = (CARD_VALUE) j;
 			d.cards[d.card_count] = create_card(value, suit);
@@ -111,4 +116,43 @@ void print_deck(DECK deck) {
 		CARD c = deck.cards[i];
 		print_card(c);
 	}
+}
+
+
+
+// ====================================
+//    Shuffling
+// ====================================
+
+DECK shuffle_deck(DECK* d)
+{
+    DECK buff = {
+    	.cards = malloc(sizeof(CARD) * 52),
+		.card_count = 0
+    };
+
+    while (d->card_count > 0) {
+    	// Determain a random index
+    	int random_index = rand() % d->card_count;
+    	CARD random_card = d->cards[random_index];
+
+    	// Get that card and clone it to buff
+    	buff.cards[buff.card_count] = create_card(random_card.value, random_card.suit);
+    	++buff.card_count;
+
+    	// Move the last card to the empty spot and shrink the deck
+    	CARD last_card = d->cards[d->card_count - 1];
+    	d->cards[random_index] = last_card;
+    	--d->card_count;
+    }
+
+    return buff;
+}
+
+DECK create_shuffled_deck() {
+	DECK d = create_ordered_deck();
+	DECK sd = shuffle_deck(&d);
+	free(d.cards);
+
+	return sd;
 }
