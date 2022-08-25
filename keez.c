@@ -2,9 +2,8 @@
 #include "card.h"
 
 int main() {
-	// Create some card and print it
-	CARD a = create_card(VALUE_FIVE, SUIT_DIAMONDS);
-	print_card(a);
+	DECK d = create_ordered_deck();
+	print_deck(d);
 
 	return 0;
 }

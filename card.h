@@ -1,6 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #pragma once
 
+// ====================================
+//    Cards
+// ====================================
 typedef enum CARD_SUIT {
 	SUIT_CLUB,
 	SUIT_DIAMONDS,
@@ -70,4 +74,41 @@ void print_card(CARD c) {
 	char* suit = suit_to_string(c);
 
 	printf("%s of %s\n", value, suit);
+}
+
+
+
+
+// ====================================
+//    Decks
+// ====================================
+typedef struct DECK {
+	CARD* cards;
+	size_t card_count;
+} DECK;
+
+DECK create_ordered_deck() {
+	DECK d = {
+		.cards = malloc(sizeof(CARD) * 52),
+		.card_count = 0
+	};
+
+	for (int i = 0; i < 3; i++) {
+		CARD_SUIT suit = (CARD_SUIT) i;
+		
+		for (int j = 0; j < 13; j++) {
+			CARD_VALUE value = (CARD_VALUE) j;
+			d.cards[d.card_count] = create_card(value, suit);
+			++d.card_count;
+		}
+	}
+
+	return d;
+}
+
+void print_deck(DECK deck) {
+	for (int i = 0; i < deck.card_count; i++) {
+		CARD c = deck.cards[i];
+		print_card(c);
+	}
 }
